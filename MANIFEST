@@ -1,0 +1,7 @@
+Changes
+Makefile.PL
+MANIFEST
+mysqlPP.pm
+README
+script/mysql.pl
+t/0.base.t
