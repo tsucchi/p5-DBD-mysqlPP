@@ -346,12 +346,14 @@ sub execute
 	if (@$params != $num_param) {
 		# ...
 	}
-	my $statement = $sth->{Statement};
-	for (my $i = 0; $i < $num_param; $i++) {
-		my $dbh = $sth->{Database};
-		my $quoted_param = $dbh->quote($params->[$i]);
-		$statement =~ s/\?/$quoted_param/e;
+    my @splitted_statements = split qr/(\?)/, $sth->{Statement};
+    my $i = 0;
+	for my $item ( @splitted_statements ) {
+        my $dbh = $sth->{Database};
+        $item = $dbh->quote($params->[$i++]) if ( $item eq '?' );
 	}
+    my $statement = join '', @splitted_statements;
+
 	my $mysql = $sth->FETCH('mysqlpp_handle');
 	my $result = eval {
 		$sth->{mysqlpp_record_iterator} = undef;
