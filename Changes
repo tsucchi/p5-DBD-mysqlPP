@@ -1,5 +1,9 @@
 Revision history for Perl extension DBD::mysqlPP.
 
+0.05
+	- security fix reported in JVN#51216285
+		- also fixed RT#2595
+
 0.04  Fri Jan 24 13:42:20 JST 2003
 	- Added local quote() method.
 	  (Thanks to Aigars Grins & Laird Shaw & Ron Savage
