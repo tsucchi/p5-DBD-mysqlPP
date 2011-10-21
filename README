@@ -29,7 +29,10 @@ This module requires these other modules and libraries:
 
 COPYRIGHT AND LICENCE
 
-Copyright (C) 2003 Hiroyuki OYAMA. Japan. All rights reserved.
+
+Copyright (C) 2002-2011 Hiroyuki OYAMA. Japan. All rights reserved.
+
+Copyright (C) 2011 Takuya Tsuchida
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself. 
