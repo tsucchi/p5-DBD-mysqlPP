@@ -5,7 +5,7 @@ use DBI;
 use Carp;
 use vars qw($VERSION $err $errstr $state $drh);
 
-$VERSION = '0.04';
+$VERSION = '0.05';
 $err = 0;
 $errstr = '';
 $state = undef;
