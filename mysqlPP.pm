@@ -346,15 +346,21 @@ sub execute
 	if (@$params != $num_param) {
 		# ...
 	}
-    my @splitted_statements = split qr/(\?)/, $sth->{Statement};
+    my @splitted_statements = split qr/((?:\?)|(?:\bLIMIT\b))/i, $sth->{Statement};
     my $i = 0;
+    my $limit_found = 0;
 	for my $item ( @splitted_statements ) {
         my $dbh = $sth->{Database};
         if ( $item eq '?' && exists $params->[$i] ) {
-            $item = $dbh->quote($params->[$i++]);
+            my $value = $limit_found ? $params->[$i++] : $dbh->quote($params->[$i++]); #bind for LIMIT isn't need quote
+            $item = $value;
+        }
+        elsif( $item =~ qr/\bLIMIT\b/i ) {
+            $limit_found = 1;
         }
 	}
     my $statement = join '', @splitted_statements;
+    #warn $statement;
 
 	my $mysql = $sth->FETCH('mysqlpp_handle');
 	my $result = eval {
