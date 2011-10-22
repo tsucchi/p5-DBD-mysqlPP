@@ -350,7 +350,9 @@ sub execute
     my $i = 0;
 	for my $item ( @splitted_statements ) {
         my $dbh = $sth->{Database};
-        $item = $dbh->quote($params->[$i++]) if ( $item eq '?' );
+        if ( $item eq '?' && exists $params->[$i] ) {
+            $item = $dbh->quote($params->[$i++]);
+        }
 	}
     my $statement = join '', @splitted_statements;
 
