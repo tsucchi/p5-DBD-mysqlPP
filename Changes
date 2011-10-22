@@ -1,5 +1,8 @@
 Revision history for Perl extension DBD::mysqlPP.
 
+0.06
+	- fix RT#1979
+
 0.05
 	- security fix reported in JVN#51216285
 		- also fixed RT#2595
