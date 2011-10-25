@@ -690,32 +690,6 @@ To install this module type the following:
    make test
    make install
 
-=head1 SUPPORT OPERATING SYSTEM
-
-This module has been tested on these OSes.
-
-=over 4
-
-=item * MacOS 9.x
-
-with MacPerl5.6.1r.
-
-=item * MacOS X
-
-with perl5.6.0 build for darwin.
-
-=item * Windows2000
-
-with ActivePerl5.6.1 build631.
-
-=item * FreeBSD 3.4 and 4.x
-
-with perl5.6.1 build for i386-freebsd.
-
-with perl5.005_03 build for i386-freebsd.
-
-=back
-
 =head1 DEPENDENCIES
 
 This module requires these other modules and libraries:
