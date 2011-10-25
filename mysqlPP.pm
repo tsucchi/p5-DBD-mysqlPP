@@ -346,21 +346,7 @@ sub execute
 	if (@$params != $num_param) {
 		# ...
 	}
-    my @splitted_statements = split qr/((?:\?)|(?:\bLIMIT\b))/i, $sth->{Statement};
-    my $param_idx = 0;
-    my $limit_found = 0;
-    for (my $i=0; $i<@splitted_statements; $i++ ) {
-        my $dbh = $sth->{Database};
-        if ( $splitted_statements[$i] eq '?' && exists $params->[$param_idx] ) {
-            my $value = $limit_found ? $params->[$param_idx++] : $dbh->quote($params->[$param_idx++]); #bind for LIMIT isn't need quote
-            $splitted_statements[$i] = $value;
-            $limit_found = 0 if ( exists $splitted_statements[$i + 1] && $splitted_statements[$i + 1] !~ qr/\b,\b/ );
-        }
-        elsif( $splitted_statements[$i] =~ qr/\bLIMIT\b/i ) {
-            $limit_found = 1;
-        }
-	}
-    my $statement = join '', @splitted_statements;
+    my $statement = _mysqlpp_bind_statement($sth, $params);
     #warn $statement;
 
 	my $mysql = $sth->FETCH('mysqlpp_handle');
@@ -450,6 +436,25 @@ sub STORE
 	return $dbh->SUPER::STORE($key, $value);
 }
 
+sub _mysqlpp_bind_statement {
+    my ($sth, $params) = @_;
+
+    my @splitted = split qr/((?:\?)|(?:\bLIMIT\b))/i, $sth->{Statement};
+    my $param_idx = 0;
+    my $limit_found = 0;
+    for (my $i=0; $i<@splitted; $i++ ) {
+        my $dbh = $sth->{Database};
+        if ( $splitted[$i] eq '?' && exists $params->[$param_idx] ) {
+            my $value = $limit_found ? $params->[$param_idx++] : $dbh->quote($params->[$param_idx++]); #bind for LIMIT isn't need quote
+            $splitted[$i] = $value;
+            $limit_found = 0 if ( exists $splitted[$i + 1] && $splitted[$i + 1] !~ qr/\b,\b/ );# qr/\b,\b/ is for LIMIT ?, ?
+        }
+        elsif( $splitted[$i] =~ qr/\bLIMIT\b/i ) {
+            $limit_found = 1;
+        }
+	}
+    return join '', @splitted;
+}
 
 sub DESTROY
 {
