@@ -347,15 +347,16 @@ sub execute
 		# ...
 	}
     my @splitted_statements = split qr/((?:\?)|(?:\bLIMIT\b))/i, $sth->{Statement};
-    my $i = 0;
+    my $param_idx = 0;
     my $limit_found = 0;
-	for my $item ( @splitted_statements ) {
+    for (my $i=0; $i<@splitted_statements; $i++ ) {
         my $dbh = $sth->{Database};
-        if ( $item eq '?' && exists $params->[$i] ) {
-            my $value = $limit_found ? $params->[$i++] : $dbh->quote($params->[$i++]); #bind for LIMIT isn't need quote
-            $item = $value;
+        if ( $splitted_statements[$i] eq '?' && exists $params->[$param_idx] ) {
+            my $value = $limit_found ? $params->[$param_idx++] : $dbh->quote($params->[$param_idx++]); #bind for LIMIT isn't need quote
+            $splitted_statements[$i] = $value;
+            $limit_found = 0 if ( exists $splitted_statements[$i + 1] && $splitted_statements[$i + 1] !~ qr/\b,\b/ );
         }
-        elsif( $item =~ qr/\bLIMIT\b/i ) {
+        elsif( $splitted_statements[$i] =~ qr/\bLIMIT\b/i ) {
             $limit_found = 1;
         }
 	}
