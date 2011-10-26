@@ -3,9 +3,7 @@ Revision history for Perl extension DBD::mysqlPP.
 0.06
 	- fix RT#1979 (Broken functionality when using '?'-characters in data)
 	- fix RT#16763 (Incorrect quoting of parameter values in LIMIT clause)
-	- remove 'SUPPORT OPERATING SYSTEM'
-		- because description is old
-		- It is not need because now we have CPAN Testers.
+	- remove 'SUPPORT OPERATING SYSTEM' because description is old
 
 0.05
 	- security fix reported in JVN#51216285
