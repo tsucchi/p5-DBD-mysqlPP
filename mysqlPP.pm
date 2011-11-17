@@ -445,9 +445,14 @@ sub _mysqlpp_bind_statement {
     for (my $i=0; $i<@splitted; $i++ ) {
         my $dbh = $sth->{Database};
         if ( $splitted[$i] eq '?' && exists $params->[$param_idx] ) {
-            my $value = $limit_found ? $params->[$param_idx++] : $dbh->quote($params->[$param_idx++]); #bind for LIMIT isn't need quote
+            my $value = $limit_found  && $params->[$param_idx] =~ qr/^\d+$/  ? $params->[$param_idx++]  #bind for LIMIT isn't need quote
+                                                                             : $dbh->quote($params->[$param_idx++]);
             $splitted[$i] = $value;
-            $limit_found = 0 if ( exists $splitted[$i + 1] && $splitted[$i + 1] !~ qr/\b,\b/ );# qr/\b,\b/ is for LIMIT ?, ?
+            if ( exists $splitted[$i + 1] 
+                   && $splitted[$i + 1] !~ qr/,/ # qr/,/ is for LIMIT ?, ?
+                   && $splitted[$i + 1] !~ qr/\bOFFSET\b/i  ) {
+                $limit_found = 0;
+            }
         }
         elsif( $splitted[$i] =~ qr/\bLIMIT\b/i ) {
             $limit_found = 1;

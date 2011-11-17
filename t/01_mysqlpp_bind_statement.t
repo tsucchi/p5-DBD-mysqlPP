@@ -1,7 +1,7 @@
 #!/usr/bin/perl -w
 use strict;
 use warnings;
-use Test::More tests => 6;
+use Test::More tests => 8;
 use Net::MySQL;
 
 BEGIN {
@@ -34,6 +34,14 @@ bind_sql_ok('select * from test_table where param1 = ?',
 bind_sql_ok('select * from test_table limit ?',
             [1],
             'select * from test_table limit 1');
+
+bind_sql_ok('select * from test_table limit ?, ?',
+            [1, 2],
+            'select * from test_table limit 1, 2');
+bind_sql_ok('select * from test_table limit ? offset ?',
+            [1, 2],
+            'select * from test_table limit 1 offset 2');
+
 
 # JVN#51216285 SQL Injection
 bind_sql_ok('select * from test_table where param1 = ? and param2 = ?',
