@@ -1,7 +1,7 @@
 Changes
 Makefile.PL
 MANIFEST			This list of files
-MYMETA.yml
+META.yml
 mysqlPP.pm
 README
 script/mysql.pl
